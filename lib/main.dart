@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gsneaker/controllers/readShoes.dart';
-import 'package:gsneaker/providers/listShoesBuyProvider.dart';
+import 'package:gsneaker/providers/ShoesProvider.dart';
 import 'package:gsneaker/views/ourProducts.dart';
 import 'package:gsneaker/views/yourCart.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +9,6 @@ void main() {
     MultiProvider (
       providers: [
         ChangeNotifierProvider(create: (_) => ListShoesProvider()),
-        ChangeNotifierProvider(create: (_) => ListShoesBuyProvider()),
       ],
       child: const MyApp(),
     ) 
