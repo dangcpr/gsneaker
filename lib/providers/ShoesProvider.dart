@@ -32,15 +32,22 @@ class ListShoesProvider extends ChangeNotifier {
 
   Future<void> updateCartFromLocal() async {
     try {
+      //Only for testing
+      /*
+      SharedPreferences.setMockInitialValues({
+        'listShoesBuy': "[{\"id\":1,\"image\":\"https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/air-zoom-pegasus-36-mens-running-shoe-wide-D24Mcz-removebg-preview.png\",\"name\":\"NikeAirZoomPegasus36\",\"description\":\"TheiconicNikeAirZoomPegasus36offersmorecoolingandmeshthattargetsbreathabilityacrosshigh-heatareas.Aslimmerheelcollarandtonguereducebulk,whileexposedcablesgiveyouasnugfitathigherspeeds.\",\"price\":108.97,\"color\":\"#e1e7ed\",\"quantity\":2},{\"id\":2,\"image\":\"https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/air-zoom-pegasus-36-shield-mens-running-shoe-24FBGb__1_-removebg-preview.png\",\"name\":\"NikeAirZoomPegasus36Shield\",\"description\":\"TheNikeAirZoomPegasus36Shieldgetsupdatedtoconquerwetroutes.Awater-repellentuppercombineswithanoutsolethathelpscreategriponwetsurfaces,lettingyouruninconfidencedespitetheweather.\",\"price\":89.97,\"color\":\"#4D317F\",\"quantity\":3}]"
+      });
+*/
       //Get data Local Storage
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? response = prefs.getString('listShoesBuy');
-
+      //prefs.remove('listShoesBuy');
       if(response == null) return;
 
-      Iterable data = await json.decode(response);
+      List<dynamic> data = await json.decode(response);
 
-      _listShoesBuy = List<Shoe>.from(data.map((model) => Shoe.fromMap(model)));
+      //_listShoesBuy = List<Shoe>.from(data2.map((model) => Shoe.fromMap(model)));
+      _listShoesBuy = data.map((shoeJson) => Shoe.fromJson(shoeJson)).toList();
       caculatePrice();
       notifyListeners();
     } catch (e) {

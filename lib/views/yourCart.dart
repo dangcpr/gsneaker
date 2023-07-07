@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gsneaker/constants/colors.dart';
 import 'package:gsneaker/providers/ShoesProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class yourCartScreen extends StatefulWidget {
   const yourCartScreen({super.key});
