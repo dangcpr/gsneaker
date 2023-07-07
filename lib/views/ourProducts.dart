@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gsneaker/constants/colors.dart';
-import 'package:gsneaker/controllers/readShoes.dart';
 import 'package:gsneaker/providers/ShoesProvider.dart';
 import 'package:gsneaker/models/shoe.dart';
-import 'package:gsneaker/views/yourCart.dart';
 import 'package:provider/provider.dart';
 
 class ourProductScreen extends StatefulWidget {
@@ -14,7 +12,6 @@ class ourProductScreen extends StatefulWidget {
 }
 
 class _ourProductScreenState extends State<ourProductScreen> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +62,7 @@ class _ourProductScreenState extends State<ourProductScreen> {
 
             Padding(
               padding: EdgeInsets.only(left: 25, right: 25, top: 50, bottom: 0),
-              child: Text('Our Products', style: TextStyle(fontFamily: 'RubikBold', fontSize: 24, color: colorProject.Black),),
+              child: SelectableText('Our Products', style: TextStyle(fontFamily: 'RubikBold', fontSize: 24, color: colorProject.Black),),
             ) ,    
                       
             Padding(
@@ -99,12 +96,12 @@ class _ourProductScreenState extends State<ourProductScreen> {
 
                                   Padding(
                                     padding: EdgeInsets.only(bottom: 20),
-                                    child: Text(shoes[index].name, style: TextStyle(fontFamily: 'RubikBold', fontSize: 20, color: colorProject.Black),),
+                                    child: SelectableText(shoes[index].name, style: TextStyle(fontFamily: 'RubikBold', fontSize: 20, color: colorProject.Black),),
                                   ),
                                 
                                   Padding(
                                     padding: EdgeInsets.only(bottom: 30),
-                                    child: Text(shoes[index].description, style: TextStyle(fontFamily: 'RubikLight', fontSize: 12, color: colorProject.Black),),
+                                    child: SelectableText(shoes[index].description, style: TextStyle(fontFamily: 'RubikLight', fontSize: 12, color: colorProject.Black),),
                                   ),
 
                                   Padding(
@@ -112,7 +109,7 @@ class _ourProductScreenState extends State<ourProductScreen> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget> [
-                                        Text("\$" + shoes[index].price.toStringAsFixed(2).toString(), style: TextStyle(fontFamily: 'RubikBold', fontSize: 20, color: colorProject.Black, fontWeight: FontWeight.bold),),
+                                        SelectableText("\$" + shoes[index].price.toStringAsFixed(2).toString(), style: TextStyle(fontFamily: 'RubikBold', fontSize: 20, color: colorProject.Black, fontWeight: FontWeight.bold),),
 
                                         context.read<ListShoesProvider>().listShoesBuy.indexWhere((item) => item.id == shoes[index].id) == -1 ? 
                                           TextButton(

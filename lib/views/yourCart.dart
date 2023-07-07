@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gsneaker/constants/colors.dart';
 import 'package:gsneaker/providers/ShoesProvider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class yourCartScreen extends StatefulWidget {
   const yourCartScreen({super.key});
@@ -11,9 +12,22 @@ class yourCartScreen extends StatefulWidget {
 }
 
 class _yourCartScreenState extends State<yourCartScreen> {
+
+  
+  @override
+  void initState() {
+    super.initState();
+    context.read<ListShoesProvider>().updateCartFromLocal();
+    //context.read<ListShoesProvider>().caculatePrice();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     final _listShoesBuyProvider = Provider.of<ListShoesProvider>(context);
+    //_listShoesBuyProvider.caculatePrice();
+    //_listShoesBuyProvider.updateCartFromLocal();
 
     return UnconstrainedBox(
       child: Container(
@@ -65,7 +79,7 @@ class _yourCartScreenState extends State<yourCartScreen> {
                     Row (
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text('Your cart', style: TextStyle(fontFamily: 'RubikBold', fontSize: 24, color: colorProject.Black),),
+                        SelectableText('Your cart', style: TextStyle(fontFamily: 'RubikBold', fontSize: 24, color: colorProject.Black),),
                         Text('\$' + _listShoesBuyProvider.totalPrice.toStringAsFixed(2).toString() , style: TextStyle(fontFamily: 'RubikBold', fontSize: 24, color: colorProject.Black),)
                       ],
                     ),                  
@@ -83,12 +97,12 @@ class _yourCartScreenState extends State<yourCartScreen> {
                     Expanded(
                       child: ScrollConfiguration(
                         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                        child: _listShoesBuyProvider.listShoesBuy.isEmpty ? Text('Your cart is empty', style: TextStyle(fontFamily: 'RubikLight', fontSize: 14, color: colorProject.Black)): ListView.builder(
+                        child: _listShoesBuyProvider.listShoesBuy.isEmpty ? SelectableText('Your cart is empty', style: TextStyle(fontFamily: 'RubikLight', fontSize: 14, color: colorProject.Black)): ListView.builder(
                           itemCount: _listShoesBuyProvider.listShoesBuy.length,
                           itemBuilder: ((context, index) => 
                             Container(
                               width: 250,
-                              height: 150,
+                              height: 155,
                               child: Row(
                                 children: <Widget> [
                                   Padding(
@@ -118,12 +132,12 @@ class _yourCartScreenState extends State<yourCartScreen> {
                                       children: <Widget>[
                                         Padding(
                                           padding: EdgeInsets.only(left: 15, top: 20, bottom: 15),
-                                          child: Text(_listShoesBuyProvider.listShoesBuy[index].name, style: TextStyle(fontFamily: 'RubikBold', fontSize: 14, color: colorProject.Black),),
+                                          child: SelectableText(_listShoesBuyProvider.listShoesBuy[index].name, style: TextStyle(fontFamily: 'RubikBold', fontSize: 14, color: colorProject.Black),),
                                         ),
 
                                         Padding(
                                           padding: EdgeInsets.only(left: 15, bottom: 15),
-                                          child: Text("\$" + _listShoesBuyProvider.listShoesBuy[index].price.toStringAsFixed(2).toString(), style: TextStyle(fontFamily: 'RubikBold', fontSize: 18, color: colorProject.Black),),
+                                          child: SelectableText("\$" + _listShoesBuyProvider.listShoesBuy[index].price.toStringAsFixed(2).toString(), style: TextStyle(fontFamily: 'RubikBold', fontSize: 18, color: colorProject.Black),),
                                         ),
 
                                         Row(
@@ -144,7 +158,7 @@ class _yourCartScreenState extends State<yourCartScreen> {
                                                   child: Image.asset('assets/images/plus.png', scale: 8, fit: BoxFit.fill, alignment: Alignment.center),
                                                 ),
 
-                                                Text(_listShoesBuyProvider.listShoesBuy[index].quantity.toString(), style: TextStyle(fontFamily: 'RubikLight', fontSize: 14, color: colorProject.Black),),
+                                                SelectableText(_listShoesBuyProvider.listShoesBuy[index].quantity.toString(), style: TextStyle(fontFamily: 'RubikLight', fontSize: 14, color: colorProject.Black),),
 
                                                 ElevatedButton(
                                                   onPressed: () => {

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gsneaker/models/shoe.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class ListShoesProvider extends ChangeNotifier {
@@ -14,6 +15,8 @@ class ListShoesProvider extends ChangeNotifier {
   List<Shoe> get shoes => _shoes;
   List<Shoe> get listShoesBuy => _listShoesBuy;
   double get totalPrice => _totalPrice;
+
+  
 
   Future<void> readJson() async {
     try {
@@ -27,40 +30,98 @@ class ListShoesProvider extends ChangeNotifier {
     }
   }
 
-  void updateItemToCart(List<Shoe> list) {
-    _shoes = list;
-    notifyListeners();
-  }
+  Future<void> updateCartFromLocal() async {
+    try {
+      //Only for testing
+      SharedPreferences.setMockInitialValues({
+        'listShoesBuy': "[{\"id\":1,\"image\":\"https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/air-zoom-pegasus-36-mens-running-shoe-wide-D24Mcz-removebg-preview.png\",\"name\":\"NikeAirZoomPegasus36\",\"description\":\"TheiconicNikeAirZoomPegasus36offersmorecoolingandmeshthattargetsbreathabilityacrosshigh-heatareas.Aslimmerheelcollarandtonguereducebulk,whileexposedcablesgiveyouasnugfitathigherspeeds.\",\"price\":108.97,\"color\":\"#e1e7ed\",\"quantity\":2},{\"id\":2,\"image\":\"https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/air-zoom-pegasus-36-shield-mens-running-shoe-24FBGb__1_-removebg-preview.png\",\"name\":\"NikeAirZoomPegasus36Shield\",\"description\":\"TheNikeAirZoomPegasus36Shieldgetsupdatedtoconquerwetroutes.Awater-repellentuppercombineswithanoutsolethathelpscreategriponwetsurfaces,lettingyouruninconfidencedespitetheweather.\",\"price\":89.97,\"color\":\"#4D317F\",\"quantity\":3}]"
+      });
 
-  void addShoesToCart(Shoe shoe) {
-    _listShoesBuy.add(shoe);
-    notifyListeners();
-  }
+      //Get data Local Storage
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? response = prefs.getString('listShoesBuy');
 
-  void deleteShoesFromCart(Shoe shoe) {
-    int index = _listShoesBuy.indexWhere((e) => e.id == shoe.id);
-    _listShoesBuy.removeAt(index);
-    notifyListeners();
-  }
+      if(response == null) return;
 
-  void deleteShoesToCartAuto() {
-    for (int i = 0; i < _listShoesBuy.length; i++) {
-      if(_listShoesBuy[i].quantity <= 0)
-        _listShoesBuy.removeAt(i);
+      Iterable data = await json.decode(response);
+
+      _listShoesBuy = List<Shoe>.from(data.map((model) => Shoe.fromMap(model)));
+      caculatePrice();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error: updateCartFromLocal: ' + e.toString());
     }
-    notifyListeners();
   }
 
-  void changeQuantityToCartPlus(Shoe shoe) {
-    int index = _listShoesBuy.indexWhere((e) => e.id == shoe.id);
-    _listShoesBuy[index].quantity = _listShoesBuy[index].quantity + 1;
-    notifyListeners();
+  Future<void> addShoesToCart(Shoe shoe) async {
+    try {
+      _listShoesBuy.add(shoe);
+
+      //Save into Local Storage
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('listShoesBuy', json.encode(_listShoesBuy));
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error: addShoesToCart: ' + e.toString());
+    }
   }
 
-  void changeQuantityToCartMinus(Shoe shoe) {
-    int index = _listShoesBuy.indexWhere((e) => e.id == shoe.id);
-    _listShoesBuy[index].quantity = _listShoesBuy[index].quantity - 1;
-    notifyListeners();
+  Future<void> deleteShoesFromCart(Shoe shoe) async {
+    try {
+      int index = _listShoesBuy.indexWhere((e) => e.id == shoe.id);
+      _listShoesBuy.removeAt(index);
+
+      //Save into Local Storage
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('listShoesBuy', json.encode(_listShoesBuy));
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error: deleteShoesFromCart: ' + e.toString());
+    }
+  }
+
+  Future<void> deleteShoesToCartAuto() async {
+    try {
+      for (int i = 0; i < _listShoesBuy.length; i++) {
+        if(_listShoesBuy[i].quantity <= 0)
+          _listShoesBuy.removeAt(i);
+      }
+
+      //Save into Local Storage
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('listShoesBuy', json.encode(_listShoesBuy));
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error: deleteShoesToCartAuto: ' + e.toString());
+    }
+  }
+
+  Future<void> changeQuantityToCartPlus(Shoe shoe) async {
+    try {
+      int index = _listShoesBuy.indexWhere((e) => e.id == shoe.id);
+      _listShoesBuy[index].quantity = _listShoesBuy[index].quantity + 1;
+
+      //Save into Local Storage
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('listShoesBuy', json.encode(_listShoesBuy));
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error: changeQuantityToCartPlus: ' + e.toString());
+    }
+  }
+
+  Future<void> changeQuantityToCartMinus(Shoe shoe) async {
+    try {
+      int index = _listShoesBuy.indexWhere((e) => e.id == shoe.id);
+      _listShoesBuy[index].quantity = _listShoesBuy[index].quantity - 1;
+
+      //Save into Local Storage
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('listShoesBuy', json.encode(_listShoesBuy));
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error: changeQuantityToCartMinus: ' + e.toString());
+    }
   }
 
   void caculatePrice() {
