@@ -22,12 +22,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Our Products',
+      title: 'G-Sneaker',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Our Products'),
+      home: const MyHomePage(title: 'G-Sneaker'),
     );
   }
 }
@@ -45,7 +45,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
+    final screenWidth = MediaQuery.of(context).size.width;
+    late final Widget listScreen;
+    if (screenWidth < 800) {
+      listScreen = ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: ListView(
+          children: <Widget>[
+            Padding ( 
+              padding: EdgeInsets.only(top: 20, bottom: 20),
+              child: ourProductScreen(),
+            ),
+            Padding ( 
+              padding: EdgeInsets.only(top: 20, bottom: 20),
+              child: yourCartScreen(),
+            )
+          ],
+        )
+      );
+    }
+    else {
+      listScreen = Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          ourProductScreen(),
+          yourCartScreen(),
+        ],
+      );
+    }
     return Scaffold(
       /*
       appBar: AppBar(
@@ -54,13 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       */
       body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            ourProductScreen(),
-            yourCartScreen(),
-          ],
-        ),
+        child: listScreen,
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gsneaker/models/shoe.dart';
 
+
 class ListShoesProvider extends ChangeNotifier {
   List<Shoe> _shoes = [];
 
