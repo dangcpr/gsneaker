@@ -1,4 +1,1 @@
-import 'package:gsneaker/models/shoe.dart';
-
-
-List<Shoe> listShoes = [];
+const uri = 'http://10.0.130.192:3000';

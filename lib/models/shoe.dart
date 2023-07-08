@@ -2,7 +2,7 @@ import 'dart:convert';
 
 
 class Shoe {
-  final int id;
+  final int productID;
   final String image;
   final String name;
   final String description;
@@ -11,7 +11,7 @@ class Shoe {
   int quantity;
 
   Shoe({
-    required this.id,
+    required this.productID,
     required this.image,
     required this.name,
     required this.description,
@@ -22,7 +22,7 @@ class Shoe {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'productID': productID,
       'image': image,
       'name': name,
       'description': description,
@@ -34,7 +34,7 @@ class Shoe {
 
   factory Shoe.fromMap(Map<String, dynamic> map) {
     return Shoe(
-      id: map['id'] ?? 0,
+      productID: map['productID'] ?? 0,
       image: map['image'] ?? '',
       name: map['name'] ?? '',
       description: map['description'] ?? '',

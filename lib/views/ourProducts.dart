@@ -14,8 +14,12 @@ class ourProductScreen extends StatefulWidget {
 class _ourProductScreenState extends State<ourProductScreen> {
 
   @override
+  void initState() {
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
-    Provider.of<ListShoesProvider>(context).readJson();    
+    Provider.of<ListShoesProvider>(context).readJson(context);
     List<Shoe> shoes = context.read<ListShoesProvider>().shoes;
 
     return UnconstrainedBox(
@@ -111,7 +115,7 @@ class _ourProductScreenState extends State<ourProductScreen> {
                                       children: <Widget> [
                                         SelectableText("\$" + shoes[index].price.toStringAsFixed(2).toString(), style: TextStyle(fontFamily: 'RubikBold', fontSize: 20, color: colorProject.Black, fontWeight: FontWeight.bold),),
 
-                                        context.read<ListShoesProvider>().listShoesBuy.indexWhere((item) => item.id == shoes[index].id) == -1 ? 
+                                        context.read<ListShoesProvider>().listShoesBuy.indexWhere((item) => item.productID == shoes[index].productID) == -1 ? 
                                           TextButton(
                                             style: TextButton.styleFrom(
                                               fixedSize: Size(150, 45),

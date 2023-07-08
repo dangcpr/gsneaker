@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gsneaker/controllers/readShoes.dart';
 import 'package:gsneaker/models/shoe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,12 +19,13 @@ class ListShoesProvider extends ChangeNotifier {
 
   
 
-  Future<void> readJson() async {
+  Future<void> readJson(BuildContext context) async {
     try {
-      final String response = await rootBundle.loadString('assets/data/shoes.json');
-      Iterable data = await json.decode(response)['shoes'];
+      //final String response = await rootBundle.loadString('assets/data/shoes.json');
+      //Iterable data = await json.decode(response)['shoes'];
 
-      _shoes = List<Shoe>.from(data.map((model) => Shoe.fromMap(model)));
+      // ignore: use_build_context_synchronously
+      _shoes = await ShoesController().readAllProduct(context);
       notifyListeners();
     } catch (e) {
       debugPrint('Error: readJson: ' + e.toString());
@@ -70,7 +72,7 @@ class ListShoesProvider extends ChangeNotifier {
 
   Future<void> deleteShoesFromCart(Shoe shoe) async {
     try {
-      int index = _listShoesBuy.indexWhere((e) => e.id == shoe.id);
+      int index = _listShoesBuy.indexWhere((e) => e.productID == shoe.productID);
       _listShoesBuy.removeAt(index);
 
       //Save into Local Storage
@@ -100,7 +102,7 @@ class ListShoesProvider extends ChangeNotifier {
 
   Future<void> changeQuantityToCartPlus(Shoe shoe) async {
     try {
-      int index = _listShoesBuy.indexWhere((e) => e.id == shoe.id);
+      int index = _listShoesBuy.indexWhere((e) => e.productID == shoe.productID);
       _listShoesBuy[index].quantity = _listShoesBuy[index].quantity + 1;
 
       //Save into Local Storage
@@ -114,7 +116,7 @@ class ListShoesProvider extends ChangeNotifier {
 
   Future<void> changeQuantityToCartMinus(Shoe shoe) async {
     try {
-      int index = _listShoesBuy.indexWhere((e) => e.id == shoe.id);
+      int index = _listShoesBuy.indexWhere((e) => e.productID == shoe.productID);
       _listShoesBuy[index].quantity = _listShoesBuy[index].quantity - 1;
 
       //Save into Local Storage
