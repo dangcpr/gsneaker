@@ -1,1 +1,1 @@
-const uri = 'https://gsneaker-be.vercel.app';
+const uri = 'http://10.0.130.192:3000';
