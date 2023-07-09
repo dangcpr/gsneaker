@@ -16,11 +16,12 @@ class _ourProductScreenState extends State<ourProductScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<ListShoesProvider>().readJson(context);
   }
   @override
   Widget build(BuildContext context) {
-    Provider.of<ListShoesProvider>(context).readJson(context);
-    List<Shoe> shoes = context.read<ListShoesProvider>().shoes;
+    //Provider.of<ListShoesProvider>(context).readJson(context);
+    final shoesProvider = Provider.of<ListShoesProvider>(context);
 
     return UnconstrainedBox(
       child: Container(
@@ -77,8 +78,8 @@ class _ourProductScreenState extends State<ourProductScreen> {
                     Expanded(
                       child: ScrollConfiguration(
                         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                        child: ListView.builder(
-                          itemCount: shoes.length,
+                        child: shoesProvider.shoes.length == 0 ? SelectableText('Our Products is empty', style: TextStyle(fontFamily: 'RubikLight', fontSize: 14, color: colorProject.Black)): ListView.builder(
+                          itemCount: shoesProvider.shoes.length,
                           itemBuilder: ((context, index) => 
                             Container(
                               child: Column(
@@ -89,23 +90,23 @@ class _ourProductScreenState extends State<ourProductScreen> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20),
-                                        color: Color(int.parse("0xFF${shoes[index].color.replaceFirst("#", "")}")),
+                                        color: Color(int.parse("0xFF${shoesProvider.shoes[index].color.replaceFirst("#", "")}")),
                                       ),
                                       child: RotationTransition(
                                         turns: new AlwaysStoppedAnimation(-15 / 360),
-                                        child: Image.network(shoes[index].image, scale: 1, fit: BoxFit.fill, alignment: Alignment.center),
+                                        child: Image.network(shoesProvider.shoes[index].image, scale: 1, fit: BoxFit.fill, alignment: Alignment.center),
                                       )
                                     ),
                                   ),
 
                                   Padding(
                                     padding: EdgeInsets.only(bottom: 20),
-                                    child: SelectableText(shoes[index].name, style: TextStyle(fontFamily: 'RubikBold', fontSize: 20, color: colorProject.Black),),
+                                    child: SelectableText(shoesProvider.shoes[index].name, style: TextStyle(fontFamily: 'RubikBold', fontSize: 20, color: colorProject.Black),),
                                   ),
                                 
                                   Padding(
                                     padding: EdgeInsets.only(bottom: 30),
-                                    child: SelectableText(shoes[index].description, style: TextStyle(fontFamily: 'RubikLight', fontSize: 12, color: colorProject.Black),),
+                                    child: SelectableText(shoesProvider.shoes[index].description, style: TextStyle(fontFamily: 'RubikLight', fontSize: 12, color: colorProject.Black),),
                                   ),
 
                                   Padding(
@@ -113,9 +114,9 @@ class _ourProductScreenState extends State<ourProductScreen> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget> [
-                                        SelectableText("\$" + shoes[index].price.toStringAsFixed(2).toString(), style: TextStyle(fontFamily: 'RubikBold', fontSize: 20, color: colorProject.Black, fontWeight: FontWeight.bold),),
+                                        SelectableText("\$" + shoesProvider.shoes[index].price.toStringAsFixed(2).toString(), style: TextStyle(fontFamily: 'RubikBold', fontSize: 20, color: colorProject.Black, fontWeight: FontWeight.bold),),
 
-                                        context.read<ListShoesProvider>().listShoesBuy.indexWhere((item) => item.productID == shoes[index].productID) == -1 ? 
+                                        context.read<ListShoesProvider>().listShoesBuy.indexWhere((item) => item.productID == shoesProvider.shoes[index].productID) == -1 ? 
                                           TextButton(
                                             style: TextButton.styleFrom(
                                               fixedSize: Size(150, 45),
@@ -125,8 +126,8 @@ class _ourProductScreenState extends State<ourProductScreen> {
                                               )
                                             ),
                                             onPressed: () {
-                                              Provider.of<ListShoesProvider>(context, listen: false).addShoesToCart(shoes[index]);
-                                              Provider.of<ListShoesProvider>(context, listen: false).changeQuantityToCartPlus(shoes[index]);
+                                              Provider.of<ListShoesProvider>(context, listen: false).addShoesToCart(shoesProvider.shoes[index]);
+                                              Provider.of<ListShoesProvider>(context, listen: false).changeQuantityToCartPlus(shoesProvider.shoes[index]);
                                               context.read<ListShoesProvider>().caculatePrice();
                                             },
                                             child: Text('ADD TO CART', style: TextStyle(fontFamily: 'RubikBold', fontSize: 14, color: colorProject.Black),),

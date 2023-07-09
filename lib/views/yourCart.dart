@@ -92,7 +92,6 @@ class _yourCartScreenState extends State<yourCartScreen> {
               child: Container(
                 child: Column(
                   children: <Widget>[
-                    
                     Expanded(
                       child: ScrollConfiguration(
                         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gsneaker/constants/shoes.dart';
 import 'package:gsneaker/controllers/readShoes.dart';
 import 'package:gsneaker/models/shoe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,14 +18,10 @@ class ListShoesProvider extends ChangeNotifier {
   List<Shoe> get listShoesBuy => _listShoesBuy;
   double get totalPrice => _totalPrice;
 
-  
-
   Future<void> readJson(BuildContext context) async {
     try {
       //final String response = await rootBundle.loadString('assets/data/shoes.json');
       //Iterable data = await json.decode(response)['shoes'];
-
-      // ignore: use_build_context_synchronously
       _shoes = await ShoesController().readAllProduct(context);
       notifyListeners();
     } catch (e) {
