@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gsneaker/constants/colors.dart';
 import 'package:gsneaker/providers/ShoesProvider.dart';
-import 'package:gsneaker/models/shoe.dart';
 import 'package:provider/provider.dart';
 
 class ourProductScreen extends StatefulWidget {
@@ -20,7 +19,6 @@ class _ourProductScreenState extends State<ourProductScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    //Provider.of<ListShoesProvider>(context).readJson(context);
     final shoesProvider = Provider.of<ListShoesProvider>(context);
 
     return UnconstrainedBox(

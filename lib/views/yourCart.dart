@@ -25,8 +25,6 @@ class _yourCartScreenState extends State<yourCartScreen> {
   @override
   Widget build(BuildContext context) {
     final _listShoesBuyProvider = Provider.of<ListShoesProvider>(context);
-    //_listShoesBuyProvider.caculatePrice();
-    //_listShoesBuyProvider.updateCartFromLocal();
 
     return UnconstrainedBox(
       child: Container(

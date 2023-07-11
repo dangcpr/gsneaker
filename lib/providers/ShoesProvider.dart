@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:gsneaker/constants/shoes.dart';
 import 'package:gsneaker/controllers/readShoes.dart';
 import 'package:gsneaker/models/shoe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
