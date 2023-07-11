@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:gsneaker/constants/shoes.dart';
+import 'package:gsneaker/constants/serverURL.dart';
 import 'package:gsneaker/models/shoe.dart';
 import 'package:http/http.dart' as http;
 
