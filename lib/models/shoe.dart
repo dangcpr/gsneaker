@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-
+//Using postgresql
 class Shoe {
   final int productID;
   final String image;
@@ -8,7 +8,6 @@ class Shoe {
   final String description;
   final double price;
   final String color;
-  int quantity;
 
   Shoe({
     required this.productID,
@@ -17,7 +16,6 @@ class Shoe {
     required this.description,
     required this.price,
     required this.color,
-    required this.quantity,
   });
 
   Map<String, dynamic> toMap() {
@@ -28,7 +26,6 @@ class Shoe {
       'description': description,
       'price': price,
       'color': color,
-      'quantity': quantity,
     };
   }
 
@@ -40,7 +37,6 @@ class Shoe {
       description: map['description'] ?? '',
       price: map['price'] ?? 0.0,
       color: map['color'] ?? '',
-      quantity: map['quantity'] ?? 0,
     );
   }
 

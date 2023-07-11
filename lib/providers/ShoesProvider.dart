@@ -3,17 +3,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gsneaker/controllers/readShoes.dart';
 import 'package:gsneaker/models/shoe.dart';
+import 'package:gsneaker/models/shoeBuy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 class ListShoesProvider extends ChangeNotifier {
   List<Shoe> _shoes = [];
 
-  List<Shoe> _listShoesBuy = [];
+  List<ShoeBuy> _listShoesBuy = [];
   double _totalPrice = 0;
 
   List<Shoe> get shoes => _shoes;
-  List<Shoe> get listShoesBuy => _listShoesBuy;
+  List<ShoeBuy> get listShoesBuy => _listShoesBuy;
   double get totalPrice => _totalPrice;
 
   Future<void> readJson(BuildContext context) async {
@@ -44,7 +45,7 @@ class ListShoesProvider extends ChangeNotifier {
       List<dynamic> data = await json.decode(response);
 
       //_listShoesBuy = List<Shoe>.from(data2.map((model) => Shoe.fromMap(model)));
-      _listShoesBuy = data.map((shoeJson) => Shoe.fromJson(shoeJson)).toList();
+      _listShoesBuy = data.map((shoeJson) => ShoeBuy.fromJson(shoeJson)).toList();
       caculatePrice();
       notifyListeners();
     } catch (e) {
@@ -54,7 +55,9 @@ class ListShoesProvider extends ChangeNotifier {
 
   Future<void> addShoesToCart(Shoe shoe) async {
     try {
-      _listShoesBuy.add(shoe);
+      ShoeBuy shoeBuy = ShoeBuy.fromMap(shoe.toMap());
+      _listShoesBuy.add(shoeBuy);
+      changeQuantityToCartPlus(shoeBuy);
 
       //Save into Local Storage
       final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -65,7 +68,7 @@ class ListShoesProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteShoesFromCart(Shoe shoe) async {
+  Future<void> deleteShoesFromCart(ShoeBuy shoe) async {
     try {
       int index = _listShoesBuy.indexWhere((e) => e.productID == shoe.productID);
       _listShoesBuy.removeAt(index);
@@ -95,10 +98,10 @@ class ListShoesProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> changeQuantityToCartPlus(Shoe shoe) async {
+  Future<void> changeQuantityToCartPlus(ShoeBuy shoe) async {
     try {
       int index = _listShoesBuy.indexWhere((e) => e.productID == shoe.productID);
-      _listShoesBuy[index].quantity = _listShoesBuy[index].quantity + 1;
+      _listShoesBuy[index].quantity++;
 
       //Save into Local Storage
       final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -109,10 +112,10 @@ class ListShoesProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> changeQuantityToCartMinus(Shoe shoe) async {
+  Future<void> changeQuantityToCartMinus(ShoeBuy shoe) async {
     try {
       int index = _listShoesBuy.indexWhere((e) => e.productID == shoe.productID);
-      _listShoesBuy[index].quantity = _listShoesBuy[index].quantity - 1;
+      _listShoesBuy[index].quantity--;
 
       //Save into Local Storage
       final SharedPreferences prefs = await SharedPreferences.getInstance();

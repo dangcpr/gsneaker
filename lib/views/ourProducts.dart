@@ -124,8 +124,7 @@ class _ourProductScreenState extends State<ourProductScreen> {
                                               )
                                             ),
                                             onPressed: () {
-                                              Provider.of<ListShoesProvider>(context, listen: false).addShoesToCart(shoesProvider.shoes[index]);
-                                              Provider.of<ListShoesProvider>(context, listen: false).changeQuantityToCartPlus(shoesProvider.shoes[index]);
+                                              context.read<ListShoesProvider>().addShoesToCart(shoesProvider.shoes[index]);
                                               context.read<ListShoesProvider>().caculatePrice();
                                             },
                                             child: Text('ADD TO CART', style: TextStyle(fontFamily: 'RubikBold', fontSize: 14, color: colorProject.Black),),
