@@ -17,14 +17,16 @@ class ListShoesProvider extends ChangeNotifier {
   List<ShoeBuy> get listShoesBuy => _listShoesBuy;
   double get totalPrice => _totalPrice;
 
-  Future<void> readJson(BuildContext context) async {
+  Future<List<Shoe>> readJson(BuildContext context) async {
     try {
       //final String response = await rootBundle.loadString('assets/data/shoes.json');
       //Iterable data = await json.decode(response)['shoes'];
       _shoes = await ShoesController().readAllProduct(context);
       notifyListeners();
+      return _shoes;
     } catch (e) {
       debugPrint('Error: readJson: ' + e.toString());
+      return [];
     }
   }
 
